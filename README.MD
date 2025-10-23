@@ -8,8 +8,8 @@ Supports creating, viewing, searching, and deleting.
 - ☕ Java (JDK 24)
 - 🗄️ MySQL (via JDBC)
 - ⚙️ IntelliJ IDEA
----
-**Key Features:**
+
+## Key Features:**
 - Add new contacts (name, phone, email)
 - View all saved contacts
 - Search contacts by ID or name
@@ -28,7 +28,6 @@ CREATE TABLE contacts (
 ```
 
 ##⚙️ How to Run: 
-
 1. Set up the MySQL database **`contact_book`**.
 2. Configure these environment variables in IntelliJ or your system:
 ```bash
