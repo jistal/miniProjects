@@ -1,50 +1,35 @@
 import java.sql.SQLException;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws SQLException {
 
 
-        UiManager uiManager = new UiManager();
-        InputManager inputManager = new InputManager();
+        Coordinator coordinator = new Coordinator();
+        int userPick;
 
-        uiManager.MainMenu();
-        int userPick = inputManager.mainMenuPick();
-
-        switch(userPick){
-            case 1 -> {
-                uiManager.addNewContact();
+        do {
+            userPick = coordinator.MainMenu();
+            switch (userPick) {
+                case 1 -> coordinator.addNewContact();
+                case 2 -> coordinator.viewAllContacts();
+                case 3 -> coordinator.searchContact();
+                case 4 -> coordinator.deleteContact();
+                case 5 -> {
+                    System.out.println("Exiting program...");
+                    System.exit(0);
+                }
             }
-            case 2 -> {
-                uiManager.viewAllContacts();
-            }
-            case 3 -> {
-                uiManager.searchContact();
-            }
-            case 4 -> {
-                uiManager.deleteContact();
-            }
-            case 5 -> {
-                System.exit(0);
-            }
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            waitForEnter();
+        } while (userPick != 5);
 
     }
+
+
+    private static void waitForEnter() {
+        System.out.println("Press enter to continue...");
+        Scanner scanner = new Scanner(System.in);
+        scanner.nextLine();
+    }
+
 }
