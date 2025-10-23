@@ -10,12 +10,12 @@ Supports creating, viewing, searching, and deleting.
 - ⚙️ IntelliJ IDEA
 
 **Key Features:**
-- 1. Add new contacts (name, phone, email)
-- 2. View all saved contacts
-- 3. Search contacts by ID or name
-- 4. Delete contacts by ID or name
-- 5. Uses `PreparedStatement` for SQL safety
-- 6. Database credentials handled through environment variables
+- Add new contacts (name, phone, email)
+- View all saved contacts
+- Search contacts by ID or name
+- Delete contacts by ID or name
+- Uses `PreparedStatement` for SQL safety
+- Database credentials handled through environment variables
 
 **Database Schema:**
 ```bash
@@ -26,12 +26,13 @@ CREATE TABLE contacts (
     email VARCHAR(50)
 );
 ```
-`
+
 ### ⚙️ How to Run
 
 1. Set up the MySQL database **`contact_book`**.
 2. Configure these environment variables in IntelliJ or your system:
-   ```bash
-   DB_URL=jdbc:mysql://localhost:3306/contact_book
-   DB_USER=root
-   DB_PASSWORD=your_password`
+```bash
+DB_URL=jdbc:mysql://localhost:3306/contact_book
+DB_USER=root
+DB_PASSWORD=your_password
+```
