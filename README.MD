@@ -1,4 +1,4 @@
-## Project 1: Contact Book
+## Project 1: Contact Book - Java + MySQL
 
 **Description:**  
 A simple **Java console application** that connects to a **MySQL database** to manage personal contacts.  
