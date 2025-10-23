@@ -9,7 +9,7 @@ Supports creating, viewing, searching, and deleting.
 -  MySQL (via JDBC)
 -  IntelliJ IDEA
 
-## Key Features:**
+## Key Features:
 - Add new contacts (name, phone, email)
 - View all saved contacts
 - Search contacts by ID or name
