@@ -4,7 +4,7 @@
 A simple **Java console application** that connects to a **MySQL database** to manage personal contacts.  
 Supports creating, viewing, searching, and deleting.
 
-##T ech Stack:
+## Tech Stack:
 - ☕ Java (JDK 24)
 - 🗄️ MySQL (via JDBC)
 - ⚙️ IntelliJ IDEA
@@ -27,7 +27,7 @@ CREATE TABLE contacts (
 );
 ```
 
-##⚙️ How to Run: 
+## ⚙️ How to Run: 
 1. Set up the MySQL database **`contact_book`**.
 2. Configure these environment variables in IntelliJ or your system:
 ```bash
