@@ -5,9 +5,9 @@ A simple **Java console application** that connects to a **MySQL database** to m
 Supports creating, viewing, searching, and deleting.
 
 ## Tech Stack:
-- ☕ Java (JDK 24)
-- 🗄️ MySQL (via JDBC)
-- ⚙️ IntelliJ IDEA
+-  Java (JDK 24)
+-  MySQL (via JDBC)
+-  IntelliJ IDEA
 
 ## Key Features:**
 - Add new contacts (name, phone, email)
@@ -35,3 +35,4 @@ DB_URL=jdbc:mysql://localhost:3306/contact_book
 DB_USER=root
 DB_PASSWORD=your_password
 ```
+
