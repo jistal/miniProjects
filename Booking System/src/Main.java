@@ -15,17 +15,12 @@ import javafx.geometry.*;
 
 public class Main extends Application {
 
-    @Override
-    public void start(Stage stage) {
-        Group root = new Group();
-        Scene scene = new Scene(root, 600, 400);
-
+    public void start(Stage stage) throws Exception {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Main.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
         stage.setTitle("JavaFX App");
         stage.setScene(scene);
         stage.show();
     }
 
-    public static void main(String[] args) {
-        launch();
-    }
 }
