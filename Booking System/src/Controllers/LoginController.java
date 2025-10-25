@@ -11,7 +11,7 @@ import java.io.IOException;
 public class LoginController {
 
     // ref to scene controller
-    private SceneController sceneController;
+    private SceneManager sceneManager;
 
 
    @FXML private AnchorPane rootContainer;
@@ -22,7 +22,7 @@ public class LoginController {
    @FXML private Hyperlink goToSignUpPage;
 
 
-  @FXML  public void initialize(){
+  @FXML public void initialize(){
 
 
 
@@ -34,13 +34,13 @@ public class LoginController {
     private void setGoToSignUpPage(){
         goToSignUpPage.setOnAction(e->{
 
-            sceneController = new SceneController();
-            sceneController.setLoginController(this);
+            sceneManager = new SceneManager();
+            sceneManager.setLoginController(this);
 
             // get the current stage
            Stage stage = (Stage) goToSignUpPage.getScene().getWindow();
            try {
-               sceneController.switchScenes(stage, "Signup.fxml");
+               sceneManager.switchScenes(stage, "Signup.fxml");
            } catch (IOException ex) {
                System.err.println("Could not switch scenes! (Login -> Signup)");
            }

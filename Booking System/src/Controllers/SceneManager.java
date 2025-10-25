@@ -5,7 +5,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
 
-public class SceneController {
+public class SceneManager {
 
 
     // link to login controller
@@ -20,6 +20,11 @@ public class SceneController {
         this.signupController = signupController;
     }
 
+    // link to admin controller
+    private AdminController adminController;
+    public void setAdminController(AdminController adminController){
+        this.adminController = adminController;
+    }
 
         public void switchScenes(Stage stage, String fxmlPath) throws IOException {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/" + fxmlPath));

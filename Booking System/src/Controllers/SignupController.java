@@ -21,7 +21,7 @@ public class SignupController {
 
 
 
-private SceneController sceneController;
+private SceneManager sceneManager;
 
 
 
@@ -36,13 +36,13 @@ setGoToLoginPage();
     private void setGoToLoginPage(){
         goToLoginPage.setOnAction(e -> {
 
-           sceneController = new SceneController();
-           sceneController.setSignupController(this);
+            sceneManager = new SceneManager();
+            sceneManager.setSignupController(this);
             // get current stage
             Stage stage = (Stage) goToLoginPage.getScene().getWindow();
 
             try {
-                sceneController.switchScenes(stage, "Login.fxml");
+                sceneManager.switchScenes(stage, "Login.fxml");
             } catch (IOException ex) {
                 System.err.println("Could not switch scenes! (Signup -> Login)");
             }

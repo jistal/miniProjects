@@ -5,12 +5,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
- minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0"
- xmlns="http://javafx.com/javafx/24.0.1"
- xmlns:fx="http://javafx.com/fxml/1"
- fx:controller = "Controllers.AdminController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.AdminController">
    <children>
       <HBox alignment="CENTER" layoutX="405.0" layoutY="-9.0" prefHeight="100.0" prefWidth="327.0" spacing="10.0">
          <children>
@@ -24,7 +19,7 @@
             <Button layoutX="50.0" layoutY="270.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="165.0" text="Manage Slots" />
             <Button layoutX="50.0" layoutY="320.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="167.0" text="View All Bookings" />
             <Button layoutX="100.0" layoutY="550.0" mnemonicParsing="false" prefHeight="0.0" prefWidth="54.0" text="Logout" />
-            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="76.0" layoutY="32.0" prefHeight="18.0" prefWidth="110.0" text="Some text" />
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="76.0" layoutY="32.0" prefHeight="18.0" prefWidth="110.0" text="Bookify" />
          </children>
       </AnchorPane>
    </children>

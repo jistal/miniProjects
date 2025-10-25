@@ -2,6 +2,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
+import utils.DBconnection;
 
 public class Main extends Application {
 
@@ -15,6 +16,9 @@ public class Main extends Application {
         stage.centerOnScreen();
 
         stage.show();
+
+        DBconnection connect = new DBconnection();
+        connect.connectToDatabase();
     }
 
 }
