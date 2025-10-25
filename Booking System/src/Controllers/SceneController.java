@@ -8,9 +8,16 @@ import java.io.IOException;
 public class SceneController {
 
 
+    // link to login controller
     private LoginController loginController;
-    public void setSceneController(LoginController loginController){
+    public void setLoginController(LoginController loginController){
         this.loginController = loginController;
+    }
+
+    // link to sign up controller
+    private SignupController signupController;
+    public void setSignupController(SignupController signupController){
+        this.signupController = signupController;
     }
 
 
@@ -20,7 +27,6 @@ public class SceneController {
             stage.setScene(new Scene(root));
             stage.setTitle("Bookify");
             stage.setResizable(false);
-            stage.centerOnScreen();
             stage.show();
     }
 

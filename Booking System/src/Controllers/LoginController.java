@@ -6,13 +6,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 
 public class LoginController {
 
-
-
+    // ref to scene controller
     private SceneController sceneController;
 
 
@@ -24,10 +22,9 @@ public class LoginController {
    @FXML private Hyperlink goToSignUpPage;
 
 
-    public void initialize(){
+  @FXML  public void initialize(){
 
-        sceneController = new SceneController();
-        sceneController.setSceneController(this);
+
 
         setGoToSignUpPage();
 
@@ -37,13 +34,16 @@ public class LoginController {
     private void setGoToSignUpPage(){
         goToSignUpPage.setOnAction(e->{
 
-            // get current stage
-            Stage stage = (Stage) goToSignUpPage.getScene().getWindow();
-            try {
-                sceneController.switchScenes(stage, "Signup.fxml");
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
+            sceneController = new SceneController();
+            sceneController.setLoginController(this);
+
+            // get the current stage
+           Stage stage = (Stage) goToSignUpPage.getScene().getWindow();
+           try {
+               sceneController.switchScenes(stage, "Signup.fxml");
+           } catch (IOException ex) {
+               System.err.println("Could not switch scenes! (Login -> Signup)");
+           }
         });
 
     }
