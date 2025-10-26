@@ -1,15 +1,20 @@
 package Controllers;
 
+import Dao.UserDao;
 import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import model.User;
+import utils.DBconnection;
+
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public class SignupController {
-
 
     @FXML private AnchorPane signupRoot;
     @FXML private AnchorPane signUpContainer;
@@ -18,21 +23,21 @@ public class SignupController {
     @FXML private Label signUpAppTitle;
     @FXML private Hyperlink goToLoginPage;
 
+    String username, password;
 
-
-
-private SceneManager sceneManager;
-
-
+    // ref to scene manager and user dao
+    private SceneManager sceneManager;
+    private UserDao userDao;
 
 
   @FXML public void initialize(){
-
 setGoToLoginPage();
+setSignUpUsernameField();
+setSignUpPasswordField();
     }
 
 
-
+// go to login page
     private void setGoToLoginPage(){
         goToLoginPage.setOnAction(e -> {
 
@@ -46,10 +51,71 @@ setGoToLoginPage();
             } catch (IOException ex) {
                 System.err.println("Could not switch scenes! (Signup -> Login)");
             }
-
-
         });
     }
+
+
+    private void setSignUpUsernameField(){
+      signUpUsernameField.setOnAction(e ->{
+          username = signUpUsernameField.getText();
+
+         boolean isInputsComplete = areFieldsFilled(username, password);
+         if (isInputsComplete) {
+             signUpUsernameField.clear();
+             signUpPasswordField.clear();
+             try {
+                 createNewUser();
+             } catch (SQLException ex) {
+                 throw new RuntimeException(ex);
+             }
+         };
+      });
+    }
+
+    private void setSignUpPasswordField(){
+      signUpPasswordField.setOnAction(e -> {
+          password = signUpPasswordField.getText();
+
+         boolean isInputsComplete = areFieldsFilled(username, password);
+          if (isInputsComplete) {
+              signUpPasswordField.clear();
+              signUpUsernameField.clear();
+              try {
+                  createNewUser();
+              } catch (SQLException ex) {
+                  throw new RuntimeException(ex);
+              }
+          }
+
+      });
+    }
+
+
+
+
+
+
+
+    private void createNewUser() throws SQLException {
+      // create user model
+      User newUser = new User(username, password, "USER");
+      // send it to use dao
+
+      userDao = new UserDao();
+      userDao.insertNewUser(newUser);
+    }
+
+    // check if user has entered both username and password, so they may press enter and continue
+    private boolean areFieldsFilled(String username, String password){
+      boolean areFieldsFilled = false;
+
+        if (password != null && !(password.isEmpty()) && password.matches("[a-zA-z\\d]+")
+            && username != null && !(username.isEmpty()) && username.matches("[a-zA-z\\d]+")) {
+            areFieldsFilled = true;
+        }
+        return areFieldsFilled;
+    }
+
 
 
 

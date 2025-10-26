@@ -5,7 +5,10 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="signupRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.SignupController">
+<AnchorPane fx:id="signupRoot" maxHeight="-Infinity"
+maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1"
+ fx:controller="Controllers.SignupController">
 
    <children>
       <AnchorPane fx:id="singUpContainer" layoutX="350.0" layoutY="200.0" prefHeight="200.0" prefWidth="200.0">

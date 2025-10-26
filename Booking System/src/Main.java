@@ -1,8 +1,12 @@
+import Controllers.LoginController;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import utils.DBconnection;
+
+import javax.imageio.IIOParam;
+import java.sql.Connection;
 
 public class Main extends Application {
 
@@ -14,11 +18,11 @@ public class Main extends Application {
         stage.setResizable(false);
         stage.setScene(scene);
         stage.centerOnScreen();
-
         stage.show();
 
         DBconnection connect = new DBconnection();
         connect.connectToDatabase();
+
     }
 
 }

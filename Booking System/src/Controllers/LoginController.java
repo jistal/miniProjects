@@ -6,13 +6,16 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import utils.DBconnection;
+
 import java.io.IOException;
+import java.sql.Connection;
 
 public class LoginController {
 
+
     // ref to scene controller
     private SceneManager sceneManager;
-
 
    @FXML private AnchorPane rootContainer;
    @FXML private AnchorPane loginContainer;
@@ -22,7 +25,8 @@ public class LoginController {
    @FXML private Hyperlink goToSignUpPage;
 
 
-  @FXML public void initialize(){
+
+    @FXML public void initialize(){
 
 
 
