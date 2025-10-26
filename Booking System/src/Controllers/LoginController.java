@@ -1,21 +1,28 @@
 package Controllers;
 
+import Dao.UserDao;
 import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import model.User;
 import utils.DBconnection;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 public class LoginController {
 
-
     // ref to scene controller
     private SceneManager sceneManager;
+    private UserDao userDao;
+    String username, password;
+
+    boolean isPasswordCorrect = false;
+    boolean isUsernameValid = false;
 
    @FXML private AnchorPane rootContainer;
    @FXML private AnchorPane loginContainer;
@@ -27,17 +34,12 @@ public class LoginController {
 
 
     @FXML public void initialize(){
-
-
-
         setGoToSignUpPage();
-
-
+        setLoginPasswordField();
     }
 
     private void setGoToSignUpPage(){
         goToSignUpPage.setOnAction(e->{
-
             sceneManager = new SceneManager();
             sceneManager.setLoginController(this);
 
@@ -49,9 +51,79 @@ public class LoginController {
                System.err.println("Could not switch scenes! (Login -> Signup)");
            }
         });
-
     }
 
+    private void setLoginPasswordField(){
+        loginPasswordField.setOnAction(e->{
+            username = loginUsernameField.getText();
+            password = loginPasswordField.getText();
+
+            boolean isInputsComplete = areFieldsFilled(username, password);
+            try {
+                isUsernameValid = checkIfUserExits();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+
+            try {
+                isPasswordCorrect = checkIfPasswordIsCorrect();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+            if (isInputsComplete && isUsernameValid && isPasswordCorrect ) {
+                loginUsernameField.clear();
+                loginPasswordField.clear();
+                sceneManager = new SceneManager();
+                sceneManager.setLoginController(this);
+
+                Stage stage = (Stage) goToSignUpPage.getScene().getWindow();
+                try {
+                    sceneManager.switchScenes(stage, "User.fxml");
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+            }
+
+
+
+
+
+            });
+    }
+
+    private boolean checkIfUserExits() throws SQLException {
+         User user = new User(username, password, "USER");
+         userDao = new UserDao();
+
+         isUsernameValid = userDao.isUsernameValid(user);
+         return isUsernameValid;
+    }
+
+    private boolean checkIfPasswordIsCorrect() throws SQLException {
+        isPasswordCorrect = false;
+        User user = new User(username, password, "USER");
+        userDao = new UserDao();
+
+        isPasswordCorrect = userDao.isUsernameValid(user);
+        return isPasswordCorrect;
+    }
+
+
+
+
+
+
+    // check if user has entered both username and password, so they may press enter and continue
+    private boolean areFieldsFilled(String username, String password){
+        boolean areFieldsFilled = false;
+
+        if (password != null && !(password.isEmpty()) && password.matches("[a-zA-z\\d]+")
+                && username != null && !(username.isEmpty()) && username.matches("[a-zA-z\\d]+")) {
+            areFieldsFilled = true;
+        }
+        return areFieldsFilled;
+    }
 
 
 

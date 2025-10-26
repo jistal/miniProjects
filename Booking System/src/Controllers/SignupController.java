@@ -1,5 +1,4 @@
 package Controllers;
-
 import Dao.UserDao;
 import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
@@ -8,10 +7,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import model.User;
-import utils.DBconnection;
-
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.SQLException;
 
 public class SignupController {
@@ -31,9 +27,8 @@ public class SignupController {
 
 
   @FXML public void initialize(){
-setGoToLoginPage();
-setSignUpUsernameField();
-setSignUpPasswordField();
+      setGoToLoginPage();
+      setSignUpPasswordField();
     }
 
 
@@ -55,29 +50,22 @@ setSignUpPasswordField();
     }
 
 
-    private void setSignUpUsernameField(){
-      signUpUsernameField.setOnAction(e ->{
-          username = signUpUsernameField.getText();
-
-         boolean isInputsComplete = areFieldsFilled(username, password);
-         if (isInputsComplete) {
-             signUpUsernameField.clear();
-             signUpPasswordField.clear();
-             try {
-                 createNewUser();
-             } catch (SQLException ex) {
-                 throw new RuntimeException(ex);
-             }
-         };
-      });
-    }
-
     private void setSignUpPasswordField(){
       signUpPasswordField.setOnAction(e -> {
-          password = signUpPasswordField.getText();
+          String username = signUpUsernameField.getText();
+          String password = signUpPasswordField.getText();
 
          boolean isInputsComplete = areFieldsFilled(username, password);
           if (isInputsComplete) {
+              sceneManager = new SceneManager();
+              sceneManager.setSignupController(this);
+              Stage stage = (Stage) goToLoginPage.getScene().getWindow();
+
+              try {
+                  sceneManager.switchScenes(stage, "User.fxml");
+              } catch (IOException ex) {
+                  throw new RuntimeException(ex);
+              }
               signUpPasswordField.clear();
               signUpUsernameField.clear();
               try {
@@ -91,11 +79,6 @@ setSignUpPasswordField();
     }
 
 
-
-
-
-
-
     private void createNewUser() throws SQLException {
       // create user model
       User newUser = new User(username, password, "USER");
@@ -104,6 +87,8 @@ setSignUpPasswordField();
       userDao = new UserDao();
       userDao.insertNewUser(newUser);
     }
+
+
 
     // check if user has entered both username and password, so they may press enter and continue
     private boolean areFieldsFilled(String username, String password){
