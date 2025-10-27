@@ -50,6 +50,21 @@ public class UserDao {
         return isPasswordValid;
     }
 
+    public boolean isUserAdmin(User user) throws SQLException{
+        boolean isUserAdmin = false;
+
+        String checkIfUserIsAdmin = "SELECT role FROM users WHERE username = ?";
+
+        PreparedStatement ps = DBconnection.getConnection().prepareStatement(checkIfUserIsAdmin);
+
+        ps.setString(1, user.getUsername());
+        ResultSet rs = ps.executeQuery();
+
+        String userRole = rs.getString("role");
+
+        return userRole.matches("ADMIN");
+    }
+
 
 
 

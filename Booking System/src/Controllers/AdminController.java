@@ -18,6 +18,9 @@ public class AdminController {
     @FXML private TextArea adminCategoriesTextArea;
     @FXML private TextArea adminSlotsTextArea;
     @FXML private TextField adminTextField;
+    @FXML private HBox createAndRemoveBtnContainer;
+    @FXML private Button createBtn;
+    @FXML private Button removeBtn;
 
     @FXML public void initiliaze(){
 

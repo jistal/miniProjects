@@ -23,6 +23,7 @@ public class LoginController {
 
     boolean isPasswordCorrect = false;
     boolean isUsernameValid = false;
+    boolean isUserAdmin = false;
 
    @FXML private AnchorPane rootContainer;
    @FXML private AnchorPane loginContainer;
@@ -77,8 +78,15 @@ public class LoginController {
                 sceneManager.setLoginController(this);
 
                 Stage stage = (Stage) goToSignUpPage.getScene().getWindow();
+
                 try {
-                    sceneManager.switchScenes(stage, "User.fxml");
+                    if (isUserAdmin()) {
+                        sceneManager.switchScenes(stage, "Admin.fxml");
+                    } else {
+                        sceneManager.switchScenes(stage, "User.fxml");
+                    }
+                  } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -101,12 +109,20 @@ public class LoginController {
     }
 
     private boolean checkIfPasswordIsCorrect() throws SQLException {
-        isPasswordCorrect = false;
         User user = new User(username, password, "USER");
         userDao = new UserDao();
 
         isPasswordCorrect = userDao.isUsernameValid(user);
         return isPasswordCorrect;
+    }
+
+    private boolean isUserAdmin() throws SQLException{
+
+        User user = new User(username, password, "USER");
+
+        userDao = new UserDao();
+        isUserAdmin = userDao.isUserAdmin(user);
+        return isUserAdmin;
     }
 
 
