@@ -19,119 +19,122 @@ public class LoginController {
     // ref to scene controller
     private SceneManager sceneManager;
     private UserDao userDao;
-    String username, password;
+    private User user;
 
+    String username, password;
     boolean isPasswordCorrect = false;
     boolean isUsernameValid = false;
     boolean isUserAdmin = false;
 
-   @FXML private AnchorPane rootContainer;
-   @FXML private AnchorPane loginContainer;
-   @FXML private TextField loginUsernameField;
-   @FXML private TextField loginPasswordField;
-   @FXML private Label loginAppTitle;
-   @FXML private Hyperlink goToSignUpPage;
+    @FXML
+    private AnchorPane rootContainer;
+    @FXML
+    private AnchorPane loginContainer;
+    @FXML
+    private TextField loginUsernameField;
+    @FXML
+    private TextField loginPasswordField;
+    @FXML
+    private Label loginAppTitle;
+    @FXML
+    private Hyperlink goToSignUpPage;
 
-
-
-    @FXML public void initialize(){
+    @FXML
+    public void initialize() {
         setGoToSignUpPage();
         setLoginPasswordField();
     }
 
-    private void setGoToSignUpPage(){
-        goToSignUpPage.setOnAction(e->{
+    private void setGoToSignUpPage() {
+        goToSignUpPage.setOnAction(e -> {
             sceneManager = new SceneManager();
             sceneManager.setLoginController(this);
 
             // get the current stage
-           Stage stage = (Stage) goToSignUpPage.getScene().getWindow();
-           try {
-               sceneManager.switchScenes(stage, "Signup.fxml");
-           } catch (IOException ex) {
-               System.err.println("Could not switch scenes! (Login -> Signup)");
-           }
+            Stage stage = (Stage) goToSignUpPage.getScene().getWindow();
+            try {
+                sceneManager.switchScenes(stage, "Signup.fxml");
+            } catch (IOException ex) {
+                System.err.println("Could not switch scenes! (Login -> Signup)");
+            }
         });
     }
 
-    private void setLoginPasswordField(){
-        loginPasswordField.setOnAction(e->{
+    private void setLoginPasswordField() {
+        loginPasswordField.setOnAction(e -> {
             username = loginUsernameField.getText();
             password = loginPasswordField.getText();
+            boolean areFieldsFilled = areFieldsFilled(username, password);
 
-            boolean isInputsComplete = areFieldsFilled(username, password);
+            user = new User(username, password, "USER");
+            userDao = new UserDao();
+
+            // check if username exists
             try {
                 isUsernameValid = checkIfUserExits();
             } catch (SQLException ex) {
-                throw new RuntimeException(ex);
+                System.out.println("This user does not exist.");
             }
 
+            // check if password is correct
             try {
                 isPasswordCorrect = checkIfPasswordIsCorrect();
             } catch (SQLException ex) {
-                throw new RuntimeException(ex);
+                System.out.println("Password is incorrect!");
             }
-            if (isInputsComplete && isUsernameValid && isPasswordCorrect ) {
+
+            // load dashboard
+            if (areFieldsFilled && isUsernameValid && isPasswordCorrect) {
                 loginUsernameField.clear();
                 loginPasswordField.clear();
                 sceneManager = new SceneManager();
                 sceneManager.setLoginController(this);
 
                 Stage stage = (Stage) goToSignUpPage.getScene().getWindow();
-
                 try {
+                    // if user is admin load admin dashboard
                     if (isUserAdmin()) {
                         sceneManager.switchScenes(stage, "Admin.fxml");
                     } else {
+                        // else load user dashboard
                         sceneManager.switchScenes(stage, "User.fxml");
                     }
-                  } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
+                } catch (SQLException | IOException ex) {
+                    System.out.println("Something went wrong, please try again later!");
                 }
-
             }
-
-
-
-
-
-            });
+        });
     }
 
     private boolean checkIfUserExits() throws SQLException {
-         User user = new User(username, password, "USER");
-         userDao = new UserDao();
-
-         isUsernameValid = userDao.isUsernameValid(user);
-         return isUsernameValid;
+        isUsernameValid = userDao.isUsernameValid(user);
+        return isUsernameValid;
     }
 
     private boolean checkIfPasswordIsCorrect() throws SQLException {
-        User user = new User(username, password, "USER");
-        userDao = new UserDao();
+        isPasswordCorrect = userDao.isPasswordValid(user);
 
-        isPasswordCorrect = userDao.isUsernameValid(user);
         return isPasswordCorrect;
     }
 
-    private boolean isUserAdmin() throws SQLException{
-
-        User user = new User(username, password, "USER");
-
-        userDao = new UserDao();
+    private boolean isUserAdmin() throws SQLException {
         isUserAdmin = userDao.isUserAdmin(user);
         return isUserAdmin;
     }
 
 
+    private void sceneSwitchHelper(String fxmlFile) {
 
-
+        try {
+            isUsernameValid = checkIfUserExits();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 
 
     // check if user has entered both username and password, so they may press enter and continue
-    private boolean areFieldsFilled(String username, String password){
+    private boolean areFieldsFilled(String username, String password) {
         boolean areFieldsFilled = false;
 
         if (password != null && !(password.isEmpty()) && password.matches("[a-zA-z\\d]+")
@@ -140,7 +143,6 @@ public class LoginController {
         }
         return areFieldsFilled;
     }
-
 
 
 }

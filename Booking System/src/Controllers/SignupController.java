@@ -52,20 +52,22 @@ public class SignupController {
 
     private void setSignUpPasswordField(){
       signUpPasswordField.setOnAction(e -> {
-          String username = signUpUsernameField.getText();
-          String password = signUpPasswordField.getText();
+           username = signUpUsernameField.getText();
+           password = signUpPasswordField.getText();
 
-         boolean isInputsComplete = areFieldsFilled(username, password);
-          if (isInputsComplete) {
+         boolean areFieldsFilled = areFieldsFilled(username, password);
+          if (areFieldsFilled) {
               sceneManager = new SceneManager();
               sceneManager.setSignupController(this);
               Stage stage = (Stage) goToLoginPage.getScene().getWindow();
 
-              try {
-                  sceneManager.switchScenes(stage, "User.fxml");
+
+              try { sceneManager.switchScenes(stage, "User.fxml");
               } catch (IOException ex) {
-                  throw new RuntimeException(ex);
+                  System.out.println("Something went wrong, please try again later");
               }
+
+
               signUpPasswordField.clear();
               signUpUsernameField.clear();
               try {
