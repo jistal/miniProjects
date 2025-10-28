@@ -48,6 +48,24 @@ public class CategoryDAO {
     }
 
 
+    // needed to assign to slots
+    public int getCategoryID(Category category) throws SQLException{
+
+        String sql = "SELECT id FROM categories WHERE name = ?";
+        PreparedStatement ps = DBconnection.getConnection().prepareStatement(sql);
+        ps.setString(1, category.getName());
+        ResultSet rs = ps.executeQuery();
+
+        int id = -1;
+        if (rs.next()) id = rs.getInt("id");
+
+        ps.close();
+        rs.close();
+
+        return id;
+    }
+
+
 
 
 }

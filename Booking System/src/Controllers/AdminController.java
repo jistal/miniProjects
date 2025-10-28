@@ -1,11 +1,13 @@
 package Controllers;
 import Dao.CategoryDAO;
+import Dao.SlotDao;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import model.Category;
+import model.Slot;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -38,19 +40,22 @@ public class AdminController {
 
     private Category category;
     private CategoryDAO categoryDao;
+    private Slot slot;
+    private SlotDao slotDao;
 
     ArrayList<String> storedCategories = new ArrayList<>();
 
     String categoryPicked = null;
+    int categoryID;
 
     @FXML public void initialize() throws SQLException {
 
 
-        fillCategoriesScrollPane();
+        displayCategoriesAndListenForInput();
 
     }
 
-    public void fillCategoriesScrollPane() throws SQLException {
+    public void displayCategoriesAndListenForInput() throws SQLException {
 
 
         categoryDao = new CategoryDAO();
@@ -62,6 +67,9 @@ public class AdminController {
             button.setOnAction(e -> {
                 categoryPicked = button.getText();
                 type = Type.SLOT;
+                setCreateBtn(type);
+                setRemoveBtn(type);
+
             });
 
             categoriesContainer.getChildren().add(button);
@@ -92,6 +100,23 @@ public class AdminController {
 
                 case SLOT -> {
 
+                    category = new Category(categoryPicked);
+                    try {
+                        categoryID = categoryDao.getCategoryID(category);
+                    } catch (SQLException ex) {
+                        throw new RuntimeException(ex);
+                    }
+
+                    slot = new Slot(categoryPicked, userInput, categoryID);
+                    slotDao = new SlotDao();
+
+
+                    try {
+                        slotDao.addSlot(slot);
+                    } catch (SQLException ex) {
+                        throw new RuntimeException(ex);
+                    }
+
                 }
             }
 
@@ -118,17 +143,6 @@ public class AdminController {
 
             adminTextField.clear();
         });
-    }
-
-
-
-
-
-    private void addSlots(Button button){
-        button.setOnAction(e-> {
-
-        });
-
     }
 
 

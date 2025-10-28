@@ -2,12 +2,19 @@ package model;
 
 public class Slot {
 
-    String time;
+    String time, name;
+    int categoryID;
 
-    public void Slot(String time){
+
+    public Slot(String name, String time, int categoryID){
         this.time = time;
+        this.categoryID = categoryID;
+        this.name = name;
     }
 
-    private void setTime(String time){this.time = time;}
-    private String getTime(){return time;}
+    public void setTime(String time){this.time = time;}
+    public String getTime(){return time;}
+
+    public void setCategoryID(int categoryID){ this.categoryID = categoryID;}
+    public int getCategoryID() { return categoryID; }
 }

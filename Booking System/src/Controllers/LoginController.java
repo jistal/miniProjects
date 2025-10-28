@@ -72,15 +72,18 @@ public class LoginController {
             // check if username exists
             try {
                 isUsernameValid = checkIfUserExits();
+
+
             } catch (SQLException ex) {
-                System.out.println("This user does not exist.");
+                throw new RuntimeException(ex);
             }
 
             // check if password is correct
             try {
                 isPasswordCorrect = checkIfPasswordIsCorrect();
+
             } catch (SQLException ex) {
-                System.out.println("Password is incorrect!");
+                throw new RuntimeException(ex);
             }
 
             // load dashboard
