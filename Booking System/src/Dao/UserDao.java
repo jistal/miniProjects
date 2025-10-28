@@ -23,47 +23,44 @@ public class UserDao {
 
 
     public boolean isUsernameValid(User user) throws SQLException {
-
         Boolean isUsernameValid = false;
-        String checkIfUserExits = "SELECT username FROM users WHERE username = ?";
 
+        String checkIfUserExits = "SELECT username FROM users WHERE username = ?";
         PreparedStatement ps = DBconnection.getConnection().prepareStatement(checkIfUserExits);
         ps.setString(1, user.getUsername());
         ResultSet rs = ps.executeQuery();
 
+        // check if username is found
         if (rs.next()) isUsernameValid = true;
         return isUsernameValid;
     }
 
 
     public boolean isPasswordValid(User user) throws SQLException {
-
         boolean isPasswordCorrect = false;
-        String passwordStored = null;
+
+        // check password by username
         String checkIfPasswordIsValid = "SELECT password FROM users WHERE username = ?";
         PreparedStatement ps = DBconnection.getConnection().prepareStatement(checkIfPasswordIsValid);
         ps.setString(1, user.getUsername());
         ResultSet rs = ps.executeQuery();
 
+        // check if password user entered matches password stored
         if (rs.next()){
-            passwordStored = rs.getString("password");
-        }
-
-        if(passwordStored.equals(user.getPassword())){
+            if (rs.getString("password").matches(user.getPassword()))
             isPasswordCorrect = true;
         }
 
         return isPasswordCorrect;
     }
 
+
     public boolean isUserAdmin(User user) throws SQLException{
-        boolean isUserAdmin = false;
         String userRole = null;
 
+        // get role by checking their username
         String checkIfUserIsAdmin = "SELECT role FROM users WHERE username = ?";
-
         PreparedStatement ps = DBconnection.getConnection().prepareStatement(checkIfUserIsAdmin);
-
         ps.setString(1, user.getUsername());
         ResultSet rs = ps.executeQuery();
 
@@ -71,6 +68,7 @@ public class UserDao {
            userRole  = rs.getString("role");
         }
 
+        // returns true if role is admin
         return userRole.matches("ADMIN");
     }
 

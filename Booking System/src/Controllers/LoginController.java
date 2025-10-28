@@ -99,8 +99,11 @@ public class LoginController {
                         // else load user dashboard
                         sceneManager.switchScenes(stage, "User.fxml");
                     }
-                } catch (SQLException | IOException ex) {
-                    System.out.println("Something went wrong, please try again later!");
+
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
                 }
             }
         });
@@ -113,7 +116,6 @@ public class LoginController {
 
     private boolean checkIfPasswordIsCorrect() throws SQLException {
         isPasswordCorrect = userDao.isPasswordValid(user);
-
         return isPasswordCorrect;
     }
 
@@ -123,14 +125,6 @@ public class LoginController {
     }
 
 
-    private void sceneSwitchHelper(String fxmlFile) {
-
-        try {
-            isUsernameValid = checkIfUserExits();
-        } catch (SQLException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
 
 
     // check if user has entered both username and password, so they may press enter and continue

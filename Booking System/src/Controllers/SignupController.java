@@ -91,7 +91,6 @@ public class SignupController {
     }
 
 
-
     // check if user has entered both username and password, so they may press enter and continue
     private boolean areFieldsFilled(String username, String password){
       boolean areFieldsFilled = false;
