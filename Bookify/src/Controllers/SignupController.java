@@ -1,12 +1,14 @@
 package Controllers;
 import Dao.UserDao;
+import Services.Services;
 import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import model.User;
+import Model.Session;
+import Model.User;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -23,20 +25,20 @@ public class SignupController {
 
     // ref to scene manager and user dao
     private SceneManager sceneManager;
-    private UserDao userDao;
+    private Services services;
 
 
   @FXML public void initialize(){
       setGoToLoginPage();
       setSignUpPasswordField();
-    }
+      services = new Services();
+      sceneManager = new SceneManager();
+  }
 
 
 // go to login page
     private void setGoToLoginPage(){
         goToLoginPage.setOnAction(e -> {
-
-            sceneManager = new SceneManager();
             sceneManager.setSignupController(this);
             // get current stage
             Stage stage = (Stage) goToLoginPage.getScene().getWindow();
@@ -52,59 +54,33 @@ public class SignupController {
 
     private void setSignUpPasswordField(){
       signUpPasswordField.setOnAction(e -> {
+          // get input
            username = signUpUsernameField.getText();
            password = signUpPasswordField.getText();
+           signUpPasswordField.clear();
+           signUpUsernameField.clear();
 
-         boolean areFieldsFilled = areFieldsFilled(username, password);
+           // check if both fields are filled
+         boolean areFieldsFilled = services.areFieldsFilled(username, password);
           if (areFieldsFilled) {
-              sceneManager = new SceneManager();
               sceneManager.setSignupController(this);
               Stage stage = (Stage) goToLoginPage.getScene().getWindow();
 
-
-              try { sceneManager.switchScenes(stage, "User.fxml");
-              } catch (IOException ex) {
-                  System.out.println("Something went wrong, please try again later");
-              }
-
-
-              signUpPasswordField.clear();
-              signUpUsernameField.clear();
+              // create the new user
               try {
-                  createNewUser();
+                  services.createNewUser(username, password);
               } catch (SQLException ex) {
                   throw new RuntimeException(ex);
               }
-          }
 
+              // load dashboard
+              try {
+                  sceneManager.switchScenes(stage, "User.fxml");
+                  Session.setUserLoggedIn(username);
+              } catch (IOException ex) {
+                  System.out.println("Something went wrong, please try again later");
+              }
+          }
       });
     }
-
-
-    private void createNewUser() throws SQLException {
-      // create user model
-      User newUser = new User(username, password, "USER");
-      // send it to use dao
-
-      userDao = new UserDao();
-      userDao.insertNewUser(newUser);
-    }
-
-
-    // check if user has entered both username and password, so they may press enter and continue
-    private boolean areFieldsFilled(String username, String password){
-      boolean areFieldsFilled = false;
-
-        if (password != null && !(password.isEmpty()) && password.matches("[a-zA-z\\d]+")
-            && username != null && !(username.isEmpty()) && username.matches("[a-zA-z\\d]+")) {
-            areFieldsFilled = true;
-        }
-        return areFieldsFilled;
-    }
-
-
-
-
-
-
 }

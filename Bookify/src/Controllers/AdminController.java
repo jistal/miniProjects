@@ -1,14 +1,15 @@
 package Controllers;
 import Dao.CategoryDAO;
 import Dao.SlotDao;
+import Services.Services;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import model.Category;
-import model.Slot;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -36,117 +37,131 @@ public class AdminController {
     } Type type = Type.CATEGORY;
 
 
-
-
-    private Category category;
     private CategoryDAO categoryDao;
-    private Slot slot;
     private SlotDao slotDao;
+    private final SceneManager sceneManager = new SceneManager();
+    private Services service;
 
     ArrayList<String> storedCategories = new ArrayList<>();
+    ArrayList<String> storedSlots = new ArrayList<>();
 
-    String categoryPicked = null;
+    String selectedCategory = null;
     int categoryID;
 
     @FXML public void initialize() throws SQLException {
 
+        categoryDao = new CategoryDAO();
+        slotDao = new SlotDao();
+        service = new Services();
 
         displayCategoriesAndListenForInput();
-
+        setCreateBtn(type);
+        setRemoveBtn(type);
+        setAdminLogoutBtn();
     }
 
     public void displayCategoriesAndListenForInput() throws SQLException {
-
-
-        categoryDao = new CategoryDAO();
+        // get the stored categories
         storedCategories = categoryDao.displayCategory();
 
+        // display them and wait for if user clicks any of them
         for(String s :  storedCategories) {
             Button button = new Button(s);
 
             button.setOnAction(e -> {
-                categoryPicked = button.getText();
+                // get category name that was clicked
+                selectedCategory = button.getText();
                 type = Type.SLOT;
-                setCreateBtn(type);
-                setRemoveBtn(type);
 
+                try {
+                    setCreateBtn(type);
+                    setRemoveBtn(type);
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+                // display the slots available for that category
+                try {
+                    displaySlots();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
             });
-
             categoriesContainer.getChildren().add(button);
         }
     }
 
     public void displaySlots() throws SQLException{
+        // get the category id (used for foreign key in slots)
+         categoryID =  categoryDao.getCategoryID(selectedCategory);
 
+        // display all the slots found in that category
+        storedSlots = slotDao.viewAllSlots(categoryID);
+        categoriesContainer.getChildren().clear();
+        for (String s : storedSlots){
+            Label label = new Label(s);
+            categoriesContainer.getChildren().add(label);
+        }
     }
 
-
+    // CHECKKKKKKKKKKKKK
+    public boolean checkSlotAvailability() throws SQLException {
+        Boolean isBooked = slotDao.checkSlotAvailability(categoryID);
+        return isBooked;
+    }
 
 
 
     private void setCreateBtn(Type type){
         createBtn.setOnAction(e->{
+            // get user input
 
             String userInput = adminTextField.getText();
             adminTextField.clear();
 
-            switch (type){
-                case CATEGORY -> {
-                    category = new Category(userInput);
-                    categoryDao = new CategoryDAO();
-
-                    try {
-                        categoryDao.addNewCategory(category);
-                    } catch (SQLException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                }
-
-                case SLOT -> {
-
-                    category = new Category(categoryPicked);
-                    try {
-                        categoryID = categoryDao.getCategoryID(category);
-                    } catch (SQLException ex) {
-                        throw new RuntimeException(ex);
-                    }
-
-                    slot = new Slot(categoryPicked, userInput, categoryID);
-                    slotDao = new SlotDao();
-
-
-                    try {
-                        slotDao.addSlot(slot);
-                    } catch (SQLException ex) {
-                        throw new RuntimeException(ex);
-                    }
-
-                }
-            }
-
-
-
-
-
-
-        });
-    }
-
-    private void setRemoveBtn(Type type){
-        removeBtn.setOnAction(e ->{
-            String categoryName = adminTextField.getText();
-
-            category = new Category(categoryName);
-
-
+            // check if we are creating a category or slot
             try {
-                categoryDao.deleteCategory(category);
+            switch (type){
+                case CATEGORY -> service.addNewCategory(userInput);
+                case SLOT -> service.addNewSlot(selectedCategory, userInput);
+            }
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }
-
-            adminTextField.clear();
         });
+    }
+
+
+    private void setRemoveBtn(Type type) throws SQLException{
+        removeBtn.setOnAction(e ->{
+            // get user input
+            String userInput = adminTextField.getText();
+            adminTextField.clear();
+
+            //check if we are removing a category or slot
+            try {
+                switch(type){
+                    case CATEGORY -> service.removeCategory(userInput);
+                    case SLOT -> service.removeSlot(selectedCategory,userInput);
+                }
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+    }
+
+
+    // log out button
+    private void setAdminLogoutBtn(){
+        adminLogoutBtn.setOnAction(e ->{
+            Stage stage = (Stage) adminLogoutBtn.getScene().getWindow();
+            try {
+                sceneManager.switchScenes(stage, "Login.fxml");
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
     }
 
 

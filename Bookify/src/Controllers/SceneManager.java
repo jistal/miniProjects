@@ -7,7 +7,6 @@ import java.io.IOException;
 
 public class SceneManager {
 
-
     // link to login controller
     private LoginController loginController;
     public void setLoginController(LoginController loginController){

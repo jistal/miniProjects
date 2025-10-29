@@ -11,6 +11,10 @@ import java.sql.Connection;
 public class Main extends Application {
 
     public void start(Stage stage) throws Exception {
+
+        // connect to DB
+        DBconnection.connectToDatabase();
+
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxml/Login.fxml"));
         System.out.println(getClass().getResource("/fxml/Login.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 900, 600);
@@ -19,10 +23,6 @@ public class Main extends Application {
         stage.setScene(scene);
         stage.centerOnScreen();
         stage.show();
-
-        DBconnection connect = new DBconnection();
-        connect.connectToDatabase();
-
     }
 
 }
