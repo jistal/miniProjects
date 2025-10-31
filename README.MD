@@ -19,6 +19,8 @@ Supports creating, viewing, searching, and deleting.
 
 ## Database Schema:
 ```bash
+CREATE DATABASE contact_book;
+
 CREATE TABLE contacts (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50),
@@ -28,8 +30,7 @@ CREATE TABLE contacts (
 ```
 
 ## ⚙️ How to Run: 
-1. Set up the MySQL database **`contact_book`**.
-2. Configure these environment variables in IntelliJ or your system:
+1. Configure these environment variables in IntelliJ or your system:
 ```bash
 DB_URL=jdbc:mysql://localhost:3306/contact_book
 DB_USER=root
