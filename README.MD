@@ -30,10 +30,18 @@ CREATE TABLE contacts (
 ```
 
 ## ⚙️ How to Run: 
-1. Configure these environment variables in IntelliJ or your system:
+
+1. **Clone the repository**
+```bash
+git clone https://github.com/xhibril/miniProjects.git
+cd miniProjects/ContactBook
+```
+
+2. **Set up environment variables**
 ```bash
 DB_URL=jdbc:mysql://localhost:3306/contact_book
 DB_USER=root
 DB_PASSWORD=your_password
 ```
+
 
